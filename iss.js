@@ -18,7 +18,7 @@ const fetchMyIP = function(callback) {
 };
 
 const fetchCoordsByIP = (ip, callback) => {
-  request(`https://geo.ipify.org/api/v2/country,city?apiKey=at_9ZCinoJOiKuF9MRSGofgEXC0Eoc07&ipAddress=${ip}`, (error, response, body) => {
+  request(`http://ipwho.is/${ip}`, (error, response, body) => {
     if (error) {
       callback(error, null);
       return;
@@ -37,17 +37,12 @@ const fetchCoordsByIP = (ip, callback) => {
     }
     
     const coords = {};
-    coords.latitude = JSON.parse(body).location.lat;
-    coords.longitude = JSON.parse(body).location.lng;
-    console.log(coords);
-
+    coords.latitude = JSON.parse(body).latitude;
+    coords.longitude = JSON.parse(body).longitude;
+    
     callback(null, coords);
   });
 };
-
-
-fetchCoordsByIP('8.8.8.8', () => {
-});
 
 const fetchISSFlyOverTimes = (coords, callback) => {
   request(`https://iss-flyover.herokuapp.com/json/?lat=${coords.latitude}&lon=${coords.longitude}`, (error, response, body) => {
@@ -67,4 +62,26 @@ const fetchISSFlyOverTimes = (coords, callback) => {
   });
 };
 
-module.exports = { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes};
+const nextISSTimesForMyLocation = (callback) => {
+  fetchMyIP((error, ip) => {
+    if (error) {
+      callback(error, null);
+    }
+    
+    fetchCoordsByIP(ip, (error, coords) => {
+      if (error) {
+        callback(error, null)
+      }
+
+      fetchISSFlyOverTimes(coords, (error, flyOverTimes) => {
+        if (error) {
+          callback(error, null)
+        }
+
+        callback(null, flyOverTimes);
+      });
+    });
+  });
+};
+
+module.exports = { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes, nextISSTimesForMyLocation};

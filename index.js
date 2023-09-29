@@ -15,16 +15,16 @@ const printPassTimes = function(passTimes) {
 
 nextISSTimesForMyLocation((error, passTimes) => {
   if (error) {
-    return console.log("It didn't work!", error)
+    return console.log("It didn't work!", error);
   }
 
   printPassTimes(passTimes);
-})
+});
 
 // fetchMyIP((error, ip) => {
 //   if (error) {
 //     console.log("It didn't work!", error);
-//   } 
+//   }
 //   console.log('It worked! Returned IP: ', ip);
 // })
 

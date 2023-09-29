@@ -13,12 +13,12 @@ const printPassTimes = function(passTimes) {
   }
 };
 
-nextISSTimesForMyLocation((error, passTimes) => {
+nextISSTimesForMyLocation((error, flyOverTimes) => {
   if (error) {
     return console.log("It didn't work!", error);
   }
 
-  printPassTimes(passTimes);
+  printPassTimes(flyOverTimes);
 });
 
 // fetchMyIP((error, ip) => {
@@ -45,5 +45,5 @@ nextISSTimesForMyLocation((error, passTimes) => {
 //   console.log('It worked! Flyover times are: ', flyOverTimes);
 // })
 
-
+module.exports = { printPassTimes };
 
